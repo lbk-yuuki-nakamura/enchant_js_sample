@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <script src="enchant.js"></script>
+    </head>
+    <body style="margin:0; padding: 0;">
+        <script>
+            enchant();
+            window.onload = function() {
+                // var game = new Game(320, 320);
+                var game = new Core(320, 320);
+                // 小さいほど速度が遅くなる
+                game.fps = 1;
+
+                game.preload('shikaku.png');
+
+                const SHIKAKU_SIZE = 30;
+                const SHIKAKU_MARGIN = 5;
+
+                var shikaku1 = new Sprite(SHIKAKU_SIZE, SHIKAKU_SIZE);
+                var shikaku2 = new Sprite(SHIKAKU_SIZE, SHIKAKU_SIZE);
+                var shikaku3 = new Sprite(SHIKAKU_SIZE, SHIKAKU_SIZE);
+                var shikaku4 = new Sprite(SHIKAKU_SIZE, SHIKAKU_SIZE);
+                var shikaku5 = new Sprite(SHIKAKU_SIZE, SHIKAKU_SIZE);
+
+                var houkouFlag = 0;
+
+
+                game.onload = function() { 
+                    shikakuInit(shikaku1, 100, 120);
+                    shikakuInit(shikaku2, 135, 120);
+                    shikakuInit(shikaku3, 170, 120);
+                    shikakuInit(shikaku4, 205, 120);
+                    shikakuInit(shikaku5, 240, 120);
+                    
+                    // ゲームの背景色設定
+                    game.rootScene.backgroundColor  = '#7ecef4';
+                }
+
+                game.addEventListener(Event.ENTER_FRAME, function() {
+                    backShikakuLoad();
+                    switch (houkouFlag) {
+                        case 0:
+                            upAction();
+                            break;
+                        case 1:
+                            downAction();
+                            break;
+                        case 2:
+                            rightAction();
+                            break;
+                        case 3:
+                            leftAction();
+                            break;
+                    }
+                });
+
+                game.addEventListener(Event.UP_BUTTON_DOWN, function() {
+                    houkouFlag = 0;
+                });
+
+                game.addEventListener(Event.DOWN_BUTTON_DOWN, function() {
+                    houkouFlag = 1;
+                });
+
+                game.addEventListener(Event.RIGHT_BUTTON_DOWN, function() {
+                    houkouFlag = 2;
+                });
+
+                game.addEventListener(Event.LEFT_BUTTON_DOWN, function() {
+                    houkouFlag = 3;
+                });
+
+                upAction = function () {
+                    shikaku1.y -= SHIKAKU_SIZE + SHIKAKU_MARGIN;
+                }
+                downAction = function () {
+                    shikaku1.y += SHIKAKU_SIZE + SHIKAKU_MARGIN;
+                }
+                rightAction = function () {
+                    shikaku1.x += SHIKAKU_SIZE + SHIKAKU_MARGIN;
+                }
+                leftAction = function () {
+                    shikaku1.x -= SHIKAKU_SIZE + SHIKAKU_MARGIN;
+                }
+
+
+                backShikakuLoad = function () {
+                    shikaku5.x = shikaku4.x
+                    shikaku5.y = shikaku4.y
+                    shikaku4.x = shikaku3.x
+                    shikaku4.y = shikaku3.y
+                    shikaku3.x = shikaku2.x
+                    shikaku3.y = shikaku2.y
+                    shikaku2.x = shikaku1.x
+                    shikaku2.y = shikaku1.y
+                }
+
+
+                shikakuInit = function(shikaku, posX, posY) {
+                    shikaku.image = game.assets['shikaku.png'];
+                    shikaku.x = posX;
+                    shikaku.y = posY;
+                    game.rootScene.addChild(shikaku);
+                }
+                game.start();
+            };
+        </script>
+    </body>
+</html>
